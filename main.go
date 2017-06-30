@@ -11,8 +11,8 @@ import (
 
 	"github.com/codegangsta/cli"
 
-	"github.com/sensiblecodeio/hookbot/pkg/hookbot"
-	"github.com/sensiblecodeio/hookbot/pkg/router/github"
+	"github.com/Arthurgyh/hookbot/pkg/hookbot"
+	"github.com/Arthurgyh/hookbot/pkg/router/github"
 )
 
 func main() {
@@ -144,6 +144,7 @@ func ActionMakeTokens(c *cli.Context) {
 		}
 
 		mac := hookbot.Sha1HMAC(key, argURL.Path)
+		fmt.Println(key, argURL.Path)
 		if c.Bool("bare") {
 			fmt.Println(mac)
 		} else {

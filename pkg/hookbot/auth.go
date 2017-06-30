@@ -5,6 +5,7 @@ import (
 	"crypto/sha1"
 	"crypto/subtle"
 	"fmt"
+	"log"
 	"net/http"
 	"regexp"
 	"strings"
@@ -41,6 +42,9 @@ func subpaths(s string) []string {
 func (h *Hookbot) IsKeyOK(w http.ResponseWriter, r *http.Request) bool {
 
 	authorization := r.Header.Get("Authorization")
+	for k, v := range r.Header {
+		log.Println("[%s]=[%s]", k, v)
+	}
 	fields := strings.Fields(authorization)
 
 	if len(fields) != 2 {
@@ -51,6 +55,8 @@ func (h *Hookbot) IsKeyOK(w http.ResponseWriter, r *http.Request) bool {
 
 	var givenMac string
 
+	log.Printf("authorization  %d,%s, = %s\n", len(fields), authType, authorization)
+
 	switch strings.ToLower(authType) {
 	default:
 		return false // Not understood
@@ -58,7 +64,10 @@ func (h *Hookbot) IsKeyOK(w http.ResponseWriter, r *http.Request) bool {
 		var ok bool
 		givenMac, _, ok = r.BasicAuth()
 		if !ok {
+			log.Printf("BasicAuth not ok")
 			return false
+		} else {
+			log.Printf("BasicAuth ok %s", givenMac)
 		}
 
 	case "bearer":
@@ -70,6 +79,8 @@ func (h *Hookbot) IsKeyOK(w http.ResponseWriter, r *http.Request) bool {
 		expectedMac := Sha1HMAC(h.key, subpath)
 		if SecureEqual(givenMac, expectedMac) {
 			return true
+		} else {
+			log.Println("not match %s %s, %s<>%s", h.key, subpath, givenMac, expectedMac)
 		}
 
 		// See if HMAC matches the URL without the {/pub,/sub} prefix.
