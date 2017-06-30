@@ -13,8 +13,8 @@ import (
 
 	"github.com/codegangsta/cli"
 
-	"github.com/sensiblecodeio/hookbot/pkg/hookbot"
-	"github.com/sensiblecodeio/hookbot/pkg/listen"
+	"github.com/Arthurgyh/hookbot/pkg/hookbot"
+	"github.com/Arthurgyh/hookbot/pkg/listen"
 )
 
 var RegexParseHeader = regexp.MustCompile("^\\s*([^\\:]+)\\s*:\\s*(.*)$")
